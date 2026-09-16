@@ -37,6 +37,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "f9fc9632-b04a-4616-ba4a-dc85a2cf58b2"
+      }
+    },
+    "owner": "ra4ellas-team"
   }
 }
