@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Text,
   useWindowDimensions,
+  TextInput,
   View,
 } from 'react-native';
 
@@ -33,6 +34,9 @@ export default function Index() {
 
   const isTablet = width >= 600;
 
+  // Тут храню то, что ввожу в поиск.
+  const [searchText, setSearchText] =
+    useState('');
 
   // Нахожу самую маленькую и самую большую цену из товаров.
   const minPrice = Math.min(
@@ -84,7 +88,20 @@ export default function Index() {
   // Здесь сначала фильтрую товары, а потом сортирую результат.
   const filteredProducts = useMemo(() => {
 
+    // Перевожу поиск в маленькие буквы, чтобы регистр не имел значения.
+    const search =
+      searchText
+        .trim()
+        .toLowerCase();
+
     const result = products.filter(product => {
+
+      // Проверяю, есть ли введённый текст в названии товара.
+      const searchOk =
+        search === '' ||
+        product.name
+          .toLowerCase()
+          .includes(search);
 
       const priceOk =
         product.price >= filters.priceRange[0] &&
@@ -117,6 +134,7 @@ export default function Index() {
 
 
       return (
+        searchOk &&
         priceOk &&
         seriesOk &&
         storageOk &&
@@ -141,6 +159,7 @@ export default function Index() {
     });
 
   }, [
+    searchText,
     filters,
     sortType,
   ]);
@@ -251,6 +270,17 @@ export default function Index() {
             Apple iPhone 17 Pro
           </Text>
 
+          <TextInput
+            style={styles.searchInput}
+
+            placeholder="Поиск товара..."
+
+            placeholderTextColor="#999999"
+
+            value={searchText}
+
+            onChangeText={setSearchText}
+          />
 
           <View style={styles.selectedButton}>
 
@@ -630,9 +660,29 @@ const styles = StyleSheet.create({
     color: '#292929',
     fontSize: 26,
     fontWeight: '400',
-    marginBottom: 28,
+    marginBottom: 20,
   },
 
+  searchInput: {
+    width: '100%',
+
+    height: 46,
+
+    borderWidth: 1,
+    borderColor: '#d8d8d8',
+
+    borderRadius: 8,
+
+    backgroundColor: '#ffffff',
+
+    paddingHorizontal: 15,
+
+    color: '#222222',
+
+    fontSize: 15,
+
+    marginBottom: 22,
+  },
 
   selectedButton: {
     alignSelf: 'flex-start',
